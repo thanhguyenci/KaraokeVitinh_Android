@@ -109,8 +109,43 @@ public class MainActivity extends AppCompatActivity {
                     //HandleFile01();
                     //Non-static method 'execute(Params...)'  cannot be referenced from a static context
                     //FileClient.execute();
-                    FileClient fileClient = new FileClient();
-                    fileClient.execute();
+                    //FileClient fileClient = new FileClient();
+                    //fileClient.execute();
+
+                    String serverAddress = "192.168.0.172"; // Or the server's IP
+                    int port = 5000;
+
+                    try (Socket socket = new Socket(serverAddress, port);
+                         InputStream inputStream = socket.getInputStream();
+                         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                         OutputStream outputStream = socket.getOutputStream();
+                         PrintWriter writer = new PrintWriter(outputStream, true)) {
+
+                        // Read from server
+                        StringBuilder stringBuilder = new StringBuilder();
+                        int chunkSize;
+                        while ((chunkSize = readInt(bufferedInputStream)) != -1) {
+                            if (chunkSize == -2) {
+                                System.out.println("File not exists");
+                                return;
+                            }
+                            byte[] chunk = new byte[chunkSize];
+                            int bytesRead = bufferedInputStream.read(chunk);
+                            stringBuilder.append(new String(chunk, 0, bytesRead, StandardCharsets.UTF_8));
+                            Log.d(TAG, stringBuilder.toString());
+                        }
+                        System.out.println("File received");
+
+                        //send response
+                        writer.println("OK");
+                        writer.flush();
+
+                        // Print the received data (for verification)
+                        // System.out.println("Received data:\n" + stringBuilder.toString());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     //e.printStackTrace();
                     Log.d(TAG, e.getLocalizedMessage());
@@ -225,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void HandleFile01(){
+    public static void HandleFile01() {
         String serverAddress = "192.168.0.172"; // Or the server's IP
         int port = 5000;
 
@@ -261,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     private static int readInt(BufferedInputStream in) throws IOException {
         byte[] lengthBytes = new byte[4];
         int bytesRead = in.read(lengthBytes);
