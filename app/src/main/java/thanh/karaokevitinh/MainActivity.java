@@ -46,18 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
         /*String serverAddress = "192.168.0.172";
         int port = 5000; // Change this to match your server's port
-
         try (Socket socket = new Socket(serverAddress, port);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-
             // Sending a message to the server
             out.println("Hello, Server!");
-
             // Reading response from the server
             String response = in.readLine();
             System.out.println("Server response: " + response);
-
         } catch (IOException e) {
             e.printStackTrace();
         }*/
@@ -111,44 +107,42 @@ public class MainActivity extends AppCompatActivity {
                     //FileClient.execute();
                     //FileClient fileClient = new FileClient();
                     //fileClient.execute();
-
                     String serverAddress = "192.168.0.172"; // Or the server's IP
                     int port = 5000;
-
                     try (Socket socket = new Socket(serverAddress, port);
                          InputStream inputStream = socket.getInputStream();
                          BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
                          OutputStream outputStream = socket.getOutputStream();
                          PrintWriter writer = new PrintWriter(outputStream, true)) {
-
                         // Read from server
                         StringBuilder stringBuilder = new StringBuilder();
                         int chunkSize;
                         while ((chunkSize = readInt(bufferedInputStream)) != -1) {
                             if (chunkSize == -2) {
                                 System.out.println("File not exists");
+                                Log.d(TAG, "File not exists");
                                 return;
                             }
                             byte[] chunk = new byte[chunkSize];
                             int bytesRead = bufferedInputStream.read(chunk);
                             stringBuilder.append(new String(chunk, 0, bytesRead, StandardCharsets.UTF_8));
                             Log.d(TAG, stringBuilder.toString());
+                            textView.setText(stringBuilder.toString());
                         }
                         System.out.println("File received");
-
+                        Log.d(TAG, "File received");
                         //send response
                         writer.println("OK");
                         writer.flush();
-
                         // Print the received data (for verification)
                         // System.out.println("Received data:\n" + stringBuilder.toString());
-
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
+                        Log.e(TAG, e.getLocalizedMessage());
                     }
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    Log.d(TAG, e.getLocalizedMessage());
+                    Log.e(TAG, e.getLocalizedMessage());
                 }
             }
         });
