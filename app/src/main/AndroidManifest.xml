@@ -16,14 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KaraokeVitinh_Android"
-        tools:targetApi="31">
+        tools:targetApi="35">
         <activity
             android:name=".CaptureAct"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
 
         <activity
-            android:name=".QRScannerActivity"
+            android:name="thanh.droidx.barcodereader.BarcodeCaptureActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

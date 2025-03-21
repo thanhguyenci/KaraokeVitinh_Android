@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk
+        android:minSdkVersion="25"
+        android:targetSdkVersion="34"
+        tools:overrideLibrary="thanh.droidx.barcodereader&lt;/manifest>" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application>
+        <activity android:name="thanh.droidx.barcodereader.BarcodeCaptureActivity" />
+    </application>
+
+</manifest>
